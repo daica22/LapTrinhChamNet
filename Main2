@@ -1,0 +1,42 @@
+<Grid>
+        <Grid Margin="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <GroupBox Grid.Row="0" Margin="0,0,0.2,-150.8" Grid.RowSpan="3">
+                <Grid Margin="0,0,0.4,-5.8" Height="153" VerticalAlignment="Top">
+                    <Label Content="ID-HH: 3" HorizontalAlignment="Left" Margin="50,23,0,0" VerticalAlignment="Top"/>
+                    <Label Content="Mã hàng Hóa" HorizontalAlignment="Left" Margin="50,54,0,0" VerticalAlignment="Top"/>
+                    <TextBox HorizontalAlignment="Left" Height="23" Margin="139,58,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+                    <Label Content="tên Hàng Hóa" HorizontalAlignment="Left" Margin="50,94,0,-14" VerticalAlignment="Top"/>
+                    <TextBox HorizontalAlignment="Left" Height="23" Margin="139,98,0,-15" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+                    <ComboBox HorizontalAlignment="Left" Margin="288,23,0,0" VerticalAlignment="Top" Width="120"/>
+                    <DatePicker HorizontalAlignment="Left" Margin="542,21,0,0" VerticalAlignment="Top"/>
+                </Grid>
+            </GroupBox>
+
+            <GroupBox Grid.Row="2" Margin="0,157.8,0.2,-207.2">
+                <Grid>
+                    <Button Content="Thêm" x:Name="them" HorizontalAlignment="Left" Margin="36,10,0,0" VerticalAlignment="Top" Width="59" Height="25" Click="Them_Click"/>
+                    <Button Content="Sửa" x:Name="sua" HorizontalAlignment="Left" Margin="132,10,0,0" VerticalAlignment="Top" Width="59" Height="25" Click="Sua_Click"/>
+                    <Button Content="Xóa" Name="xoa" HorizontalAlignment="Left" Margin="226,10,0,0" VerticalAlignment="Top" Width="59" Height="25" Click="Xoa_Click"/>
+                    <Button Content="Load Lại" Name="loadlai" HorizontalAlignment="Left" Margin="582,10,0,0" VerticalAlignment="Top" Width="59" Height="25" RenderTransformOrigin="3.467,0.875"/>
+                </Grid>
+            </GroupBox>
+
+            <GroupBox Grid.Row="2" Margin="0,208.8,0.2,-471.2">
+                <DataGrid Name="dg_HH" AutoGenerateColumns="False" SelectionChanged="Dg_HH_SelectionChanged"  >
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Mã hàng hóa" Binding="{Binding MaHangHoa}"/>
+                        <DataGridTextColumn Header="Tên hàng hóa" Binding="{Binding TenHangHoa}" />
+                        <DataGridTextColumn Header="Ngày sản xuất" Binding="{Binding NgaySanXuat}"/>
+                        <DataGridTextColumn Header="Tên nhà sản xuất" Binding="{Binding TenNSX}" />
+
+                    </DataGrid.Columns>
+                </DataGrid>
+            </GroupBox>
+        </Grid>
+    </Grid>
