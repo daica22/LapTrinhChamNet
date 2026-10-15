@@ -1,0 +1,133 @@
+using System;
+using System.Collections.Generic;
+using System.Data.Entity;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
+using System.Windows.Shapes;
+
+namespace WpfApp2
+{
+    /// <summary>
+    /// Interaction logic for MainWindow.xaml
+    /// </summary>
+    public partial class MainWindow : Window
+    {
+        BANHANGEntities db = new BANHANGEntities();
+        public MainWindow()
+        {
+            InitializeComponent();
+            LoadGrid();
+            LoadCombo();
+            dp_NgaySanXuat.SelectedDate = DateTime.Today;
+        }
+
+        private void LoadGrid()
+        {
+            dg_HH.ItemsSource = db.HANGHOAs.ToList();
+        }
+        private void LoadCombo()
+        {
+            cb_NSX.ItemsSource = db.NHASANXUATs.ToList();
+            cb_NSX.DisplayMemberPath = "TenNSX";
+            cb_NSX.SelectedValuePath = "MaNSX";
+            var ten = db.NHASANXUATs.ToList();
+            cb_NSX.SelectedItem = ten[0];
+        }
+
+        private void Them_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                HANGHOA hh = new HANGHOA();
+                hh.MaHangHoa = txt_MaHangHoa.Text;
+                hh.TenHangHoa = txt_TenHangHoa.Text;
+                hh.MaNSX = cb_NSX.SelectedValue.ToString();
+                hh.NgaySanXuat = dp_NgaySanXuat.SelectedDate.Value;
+
+                db.HANGHOAs.Add(hh);
+                db.SaveChanges();
+
+                MessageBox.Show("Thêm hàng hóa thành công!", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
+
+                LoadGrid();
+            }
+            catch
+            {
+                MessageBox.Show("Thêm hàng hóa thất bại! Lưu ý! hãy chọn ngày sản xuất và tên nhà sản xuất", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void Sua_Click(object sender, RoutedEventArgs e)
+        {
+            HANGHOA hhSua = db.HANGHOAs.FirstOrDefault(x => x.MaHangHoa == txt_MaHangHoa.Text.Trim());
+
+            if (hhSua != null)
+            {
+                hhSua.TenHangHoa = txt_TenHangHoa.Text;
+                hhSua.MaNSX = cb_NSX.SelectedValue.ToString();
+                hhSua.NgaySanXuat = dp_NgaySanXuat.SelectedDate.Value;
+
+                db.SaveChanges();
+
+                MessageBox.Show("Sửa thành công");
+                LoadGrid();
+            }
+            else
+            {
+                MessageBox.Show("Không có hàng hóa để sửa");
+            }
+        }
+
+        private void Xoa_Click(object sender, RoutedEventArgs e)
+        {
+            HANGHOA hhXoa = db.HANGHOAs.FirstOrDefault(x => x.MaHangHoa == txt_MaHangHoa.Text.Trim());
+
+            if (hhXoa != null)
+            {
+                db.HANGHOAs.Remove(hhXoa);
+                db.SaveChanges();
+
+                MessageBox.Show("Xóa thành công");
+                LoadGrid();
+            }
+            else
+            {
+                MessageBox.Show("Không có hàng hóa để xóa");
+            }
+        }
+
+        private void Dg_HH_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            HANGHOA hh = dg_HH.SelectedItem as HANGHOA;
+            if (hh != null)
+            {
+                txt_MaHangHoa.Text = hh.MaHangHoa;
+                txt_TenHangHoa.Text = hh.TenHangHoa;
+                cb_NSX.SelectedValue = hh.MaNSX;
+                dp_NgaySanXuat.SelectedDate = hh.NgaySanXuat;
+            }
+        }
+
+        private void Cb_NSX_DropDownClosed(object sender, EventArgs e)
+        {
+            String x = cb_NSX.SelectedValue.ToString();
+            dg_HH.ItemsSource = db.HANGHOAs.Where(k => k.MaNSX == x).ToList();
+        }
+
+        private void LoadLai_Click(object sender, RoutedEventArgs e)
+        {
+            txt_MaHangHoa.Clear();
+            txt_TenHangHoa.Clear();
+            LoadGrid();
+        }
+    }
+}
